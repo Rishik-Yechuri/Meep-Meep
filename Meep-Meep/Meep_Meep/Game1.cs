@@ -19,6 +19,16 @@ namespace Meep_Meep
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D roadRunner;
+        Rectangle coyoteRectangle;
+
+        Texture2D coyote;
+        Rectangle runnerRectangle;
+
+        int xLocMouse = 100;
+        int yLocMouse = 100;
+        int xLocRunner = 300;
+        int yLocRunner = 300;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -34,7 +44,8 @@ namespace Meep_Meep
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            runnerRectangle = new Rectangle(xLocRunner, yLocRunner, 125, 125);
+            coyoteRectangle = new Rectangle(xLocMouse, yLocMouse, 92, 79);
             base.Initialize();
         }
 
@@ -48,6 +59,8 @@ namespace Meep_Meep
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            roadRunner = this.Content.Load<Texture2D>("Roadrunner");
+            coyote = this.Content.Load<Texture2D>("Wile E Coyote");
         }
 
         /// <summary>
@@ -71,7 +84,42 @@ namespace Meep_Meep
                 this.Exit();
 
             // TODO: Add your update logic here
-
+            KeyboardState kb = Keyboard.GetState();
+            GamePadState pad = GamePad.GetState(PlayerIndex.One);
+            if (kb.IsKeyDown(Keys.W))
+            {
+                yLocRunner -= 2;
+            }
+            if (kb.IsKeyDown(Keys.S))
+            {
+                yLocRunner += 2;
+            }
+            if (kb.IsKeyDown(Keys.A))
+            {
+                xLocRunner -= 2;
+            }
+            if (kb.IsKeyDown(Keys.D))
+            {
+                xLocRunner += 2;
+            }
+            if (pad.DPad.Left == ButtonState.Pressed)
+            {
+                xLocMouse -= 3;
+            }
+            if (pad.DPad.Right == ButtonState.Pressed)
+            {
+                xLocMouse += 3;
+            }
+            if (pad.DPad.Up == ButtonState.Pressed)
+            {
+                yLocMouse -= 3;
+            }
+            if (pad.DPad.Down == ButtonState.Pressed)
+            {
+                yLocMouse += 3;
+            }
+            runnerRectangle = new Rectangle(xLocMouse, yLocMouse, 92, 79);
+            coyoteRectangle = new Rectangle(xLocRunner, yLocRunner, 125, 125);
             base.Update(gameTime);
         }
 
@@ -84,7 +132,10 @@ namespace Meep_Meep
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            spriteBatch.Draw(roadRunner, runnerRectangle, Color.White);
+            spriteBatch.Draw(coyote, coyoteRectangle, Color.White);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
